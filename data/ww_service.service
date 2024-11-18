@@ -1,0 +1,13 @@
+[Unit]
+Description=Westworld Linux Management Service
+Wants=network-online.target remote-fs.target storenext.mount
+After=network-online.target remote-fs.target storenext.mount
+
+[Service]
+ExecStart=/app/ww_service/bin/wlms.sh
+Restart=always
+RestartSec=5
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
