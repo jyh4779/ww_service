@@ -1,7 +1,7 @@
 ROOT="/app/ww_service"
-#ROOT="/storenext/Applications/ww_service"
+SRC_ROOT="/storenext/Applications/ww_service"
 
-VER="1.0"
+VER=1.2
 
 PROCESS_NAME="$(basename "$0" .sh)"
 
@@ -10,15 +10,17 @@ LOG_DIR="$ROOT/log"
 DATA_DIR="$ROOT/data"
 CLI_DIR="$DATA_DIR/client_data"
 
-LOG_FILE="$LOG_DIR/$PROCESS_NAME.log"
+LOG_FILE="$LOG_DIR/ww_service.log"
 LDIF_FILE="$DATA_DIR/cli.ldif"
 
+UPDATE_SH="$BIN_DIR/update_$VER.sh"
 CLI_CMD="$BIN_DIR/cli.sh"
 LIC_CMD="$BIN_DIR/wwls.sh"
 
+source $DATA_DIR/ip
+DOCKER_SERVER=$IP
 REZ_DOCKERD="rez-env docker -- dockerd"
 REZ_DOCKER="rez-env docker -- docker"
-DOCKER_SERVER="10.0.20.7:5000"
 LICENSE_ARRAY=("yeti_pixar" "foundry" "clarisse" "houdini")
 CONTAINER_NAMES=("license" "foundry" "clarisse" "houdini")
 DOCKER_DIR="/opt"
