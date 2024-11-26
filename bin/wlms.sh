@@ -6,7 +6,7 @@ init() {
 	mkdir -p $BIN_DIR
 	mkdir -p $LOG_DIR
 	mkdir -p $DATA_DIR
-	touch $LOG_DIR/$LOG_FILE
+	touch $LOG_FILE
 }
 
 update_check() {
