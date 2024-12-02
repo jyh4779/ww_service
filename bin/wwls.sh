@@ -55,21 +55,29 @@ check_container() {
 }
 
 check_docker_daemon() {
-	if ! $REZ_DOCKER info > /dev/null 2>&1; then
+	local MAX_CNT=6
+	local CNT=$1
+
+	log "[Check_docker_daemon] Check Docker Service Start ($CNT/$MAX_CNT)"
+	if (( $CNT >= $MAX_CNT )); then
+		log "Docker daemon failed to start after $MAX_CNT attempts.Exiting."
+		exit 1
+	fi
+
+	if ! systemctl is-active --quiet docker; then
 		log "Starting Docker deamon."
-		CMD="$REZ_DOCKERD --insecure-registry $DOCKER_SERVER $CMD_LOG &"
+		CMD="systemctl start docker"
 		log "CMD=[$CMD]"
 		eval $CMD
 
-		while ! $REZ_DOCKER info > /dev/null 2>&1; do
-			echo "Waiting for Docker daemon to start..."
-			sleep 1
-		done
+		sleep 2
+		
+		check_docker_daemon $((CNT + 1))
 	else
 		log "Docker daemon is already running"
 	fi
 }
 cd $DOCKER_COMPOSE_DIR
-check_docker_daemon
+check_docker_daemon 1
 
 check_container

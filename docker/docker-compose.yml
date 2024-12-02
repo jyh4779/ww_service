@@ -1,97 +1,97 @@
 services:
-        yeti_pixar:
-                image: ${IMAGE_BASE_URL}/yeti_pixar
-                container_name: docker_yeti_pixar
-                ports:
-                        - "1074:1074"
-                        - "1075:1075"
-                        - "5053:5053"
-                        - "5054:5054"
-                        - "6200:6200"
-                        - "7096:7096"
-                        - "8081:8080"
-                        - "9011:9010"
-                        - "11668:11668"
-                        - "57625:57625"
-                volumes:
-                        - ${LICENSE_VOLUME}:/opt
-        networks:
-                license_net:
-                        ipv4_address: ${LICENSE_IP}
-        mac_address: ${LICENSE_MAC}
-        hostname: license
+  yeti_pixar:
+    image: ${IMAGE_BASE_URL}/yeti_pixar
+    container_name: docker_yeti_pixar
+    ports:
+      - "1074:1074"
+      - "1075:1075"
+      - "5053:5053"
+      - "5054:5054"
+      - "6200:6200"
+      - "7096:7096"
+      - "8081:8080"
+      - "9011:9010"
+      - "11668:11668"
+      - "57625:57625"
+    volumes:
+      - ${LICENSE_VOLUME}:/opt
+    networks:
+      license_net:
+        ipv4_address: ${LICENSE_IP}
+    mac_address: ${LICENSE_MAC}
+    hostname: license
 
-        foundry:
-                image: ${IMAGE_BASE_URL}/foundry
-                container_name: docker_foundry
-                ports:
-                        - "2080:2080"
-                        - "3053:3053"
-                        - "3054:3054"
-                        - "6058:5058"
-                        - "6057:5057"
-                        - "4054:5054"
-                        - "4101:4101"
-                        - "2102:2102"
-                        - "5066:5066"
-                        - "5067:5067"
-                        - "6053:2053"
-                        - "6102:4102"
-                        - "7053:7053"
-                        - "7054:7054"
-                        - "8051:8050"
-                        - "9010:9010"
-                        - "9053:9053"
-                        - "9054:9054"
-                        - "9412:9412"
-                        - "36914:36914"
-                        - "36915:36915"
-                        - "36917:36917"
-                        - "36918:36918"
-                        - "45412:45412"
-                        - "47200:47200"
-                        - "50053:50053"
-        volumes:
-                - ${FOUNDRY_VOLUME}/opt:/opt
-                - ${FOUNDRY_VOLUME}/etc/opt:/etc/opt
-                - ${FOUNDRY_VOLUME}/opt/rsmb/revision:/usr/local/revision
-        hostname: localhost
-        networks:
-                license_net:
-                        ipv4_address: ${FOUNDRY_IP}
-        mac_address: ${FOUNDRY_MAC}
+  foundry:
+    image: ${IMAGE_BASE_URL}/foundry
+    container_name: docker_foundry
+    ports:
+      - "2080:2080"
+      - "3053:3053"
+      - "3054:3054"
+      - "6058:5058"
+      - "6057:5057"
+      - "4054:5054"
+      - "4101:4101"
+      - "2102:2102"
+      - "5066:5066"
+      - "5067:5067"
+      - "6053:2053"
+      - "6102:4102"
+      - "7053:7053"
+      - "7054:7054"
+      - "8051:8050"
+      - "9010:9010"
+      - "9053:9053"
+      - "9054:9054"
+      - "9412:9412"
+      - "36914:36914"
+      - "36915:36915"
+      - "36917:36917"
+      - "36918:36918"
+      - "45412:45412"
+      - "47200:47200"
+      - "50053:50053"
+    volumes:
+      - ${FOUNDRY_VOLUME}/opt:/opt
+      - ${FOUNDRY_VOLUME}/etc/opt:/etc/opt
+      - ${FOUNDRY_VOLUME}/opt/rsmb/revision:/usr/local/revision
+    hostname: localhost
+    networks:
+      license_net:
+        ipv4_address: ${FOUNDRY_IP}
+    mac_address: ${FOUNDRY_MAC}
 
-        clarisse:
-                image: ${IMAGE_BASE_URL}/clarisse
-                container_name: docker_clarisse
-                ports:
-                        - "40500:40500"
-        volumes:
-                - ${CLARISSE_VOLUME}:/opt/clarisse
-        networks:
-                license_net:
-                        ipv4_address: ${CLARISSE_IP}
-        hostname: License
-        mac_address: ${CLARISSE_MAC}
+  clarisse:
+    image: ${IMAGE_BASE_URL}/clarisse
+    container_name: docker_clarisse
+    ports:
+      - "40500:40500"
+    volumes:
+      - ${CLARISSE_VOLUME}:/opt/clarisse
+    networks:
+      license_net:
+        ipv4_address: ${CLARISSE_IP}
+    hostname: License
+    mac_address: ${CLARISSE_MAC}
 
-        houdini:
-                image: ${IMAGE_BASE_URL}/houdini
-                container_name: docker_houdini
-                ports:
-                        - "1715:1715"
-                        - "2714:1714"
-        volumes:
-                - ${HOUDINI_VOLUME}:/opt/houdini
-        networks:
-                license_net:
-                        ipv4_address: ${HOUDINI_IP}
-        mac_address: ${HOUDINI_MAC}
-        hostname: license
+  houdini:
+    image: ${IMAGE_BASE_URL}/houdini
+    container_name: docker_houdini
+    ports:
+      - "1715:1715"
+      - "2714:1714"
+    volumes:
+      - ${HOUDINI_VOLUME}:/opt/houdini
+    networks:
+      license_net:
+        ipv4_address: ${HOUDINI_IP}
+    mac_address: ${HOUDINI_MAC}
+    hostname: license
 
 networks:
-        license_net:
-                name: license_net
-                driver: bridge
-                ipam:
-                        config:
-                                - subnet: 172.19.0.0/24
+    license_net:
+      name: license_net
+      driver: bridge
+      ipam:
+        config:
+          - subnet: 172.19.0.0/24
