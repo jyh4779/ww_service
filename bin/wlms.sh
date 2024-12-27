@@ -46,6 +46,27 @@ update() {
 	fi
 }
 
+cli_flag=false
+
+cli() {
+	if !$cli_flag; then
+		log "Running initial [cli] command"
+		
+		local chk_client_file="/storenext/inhouse/rez/ww_bin/chk_client"
+
+		if [ -f "$chk_client_file" ]; then
+			log "File [$chk_client_file] found. Executing the file."
+
+			"$chk_client_file"
+			cli_flag=true
+		else
+			log "File [$chk_client_file] not found. Skipping execution."
+		fi
+	else
+		log "[cli] command already executed. Skipping."
+	fi	
+}
+
 log "Staring Service [$PROCESS_NAME]"
 
 init
@@ -63,6 +84,8 @@ log "Running initial [cli] command"
 while true; do
 	log "WLMS is running"
 	log "LICENSE CHECK Start!!"
-	$LIC_CMD
-	sleep 60
+#	$LIC_CMD
+
+	cli
+	sleep 120
 done	
