@@ -49,7 +49,7 @@ update() {
 cli_flag=false
 
 cli() {
-	if !$cli_flag; then
+	if ! $cli_flag; then
 		log "Running initial [cli] command"
 		
 		local chk_client_file="/storenext/inhouse/rez/ww_bin/chk_client"
@@ -57,7 +57,7 @@ cli() {
 		if [ -f "$chk_client_file" ]; then
 			log "File [$chk_client_file] found. Executing the file."
 
-			"$chk_client_file"
+			"$chk_client_file" 
 			cli_flag=true
 		else
 			log "File [$chk_client_file] not found. Skipping execution."

@@ -25,6 +25,11 @@ run_cmd() {
 
 echo "Westworld Linux Managemnet Service Install Start"
 
+if [[ $EUID -ne 0 ]]; then
+        echo "Please running this scripts as \"Super User\""
+        exit 1
+fi
+
 if [ -f "$DOCKER_INSTALL_SCRIPT" ]; then
         echo "[INFO] Found Docker install script: $DOCKER_INSTALL_SCRIPT"
         run_cmd "bash $DOCKER_INSTALL_SCRIPT"
