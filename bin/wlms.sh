@@ -2,11 +2,15 @@
 
 source /app/ww_service/bin/env.sh
 
-init() {
-	mkdir -p $BIN_DIR
-	mkdir -p $LOG_DIR
-	mkdir -p $DATA_DIR
-	touch $LOG_FILE
+update() {
+	if [ -f "$UPDATE_SH" ]; then
+		log "Update script [$UPDATE_SH] found. Executing update."
+		bash "$UPDATE_SH"
+		log "Update completed. Sleeping for 120 seconds."
+		sleep 120
+	else
+		log "Update script [$UPDATE_SH] not found. Skipping update."
+	fi
 }
 
 update_check() {
@@ -30,20 +34,20 @@ update_check() {
 		log "Version check passed: VER matches [$VER]."
 		return 0
 	else
-		log "Version check failed: Mismatch between current VER [$VER] and source VER [$SOURCE_VER]."
+		log "Update Check passed."
+		log "Mismatch between current VER [$VER] and source VER [$SOURCE_VER]."
+		update
 		return 1
 	fi
 }
 
-update() {
-	if [ -f "$UPDATE_SH" ]; then
-		log "Update script [$UPDATE_SH] found. Executing update."
-		bash "$UPDATE_SH"
-		log "Update completed. Sleeping for 120 seconds."
-		sleep 120
-	else
-		log "Update script [$UPDATE_SH] not found. Skipping update."
-	fi
+init() {
+	mkdir -p $BIN_DIR
+	mkdir -p $LOG_DIR
+	mkdir -p $DATA_DIR
+	touch $LOG_FILE
+
+	update_check
 }
 
 cli_flag=false
@@ -70,16 +74,6 @@ cli() {
 log "Staring Service [$PROCESS_NAME]"
 
 init
-
-log "Check Update Start"
-if update_check; then
-	log "Update check passed."
-else
-	update
-fi
-
-log "Running initial [cli] command"
-#$CLI_CMD
 
 while true; do
 	log "WLMS is running"

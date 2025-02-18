@@ -2,7 +2,7 @@
 
 source /app/ww_service/bin/env.sh
 
-CONTAINERS=("houdini" "clarisse" "foundry" "yeti_pixar")
+CONTAINERS=("houdini" "clarisse" "foundry" "license")
 
 CMD_LOG_FLAG=0
 
@@ -12,72 +12,75 @@ else
         CMD_LOG="> /dev/null 2>> $LOG_FILE"
 fi
 
-start_containers() {
+set_con() {
 	local SERVICE="$1"
 
 	if [ -z "$SERVICE" ]; then
-		log "No specific service specified. Starting all services."
+		log_message "No specific service specified. Starting all services."
 		SERVICE="all"
 	fi
 
 	if [[ $SERVICE == "all" ]]; then
-		log "Starting all services using Docker Compose."
-		CMD="$REZ_DOCKER_COMPOSE up -d $CMD_LOG"
-		log "CMD=[$CMD]"
+		log_message "Starting all services using Docker Compose."
+		#CMD="$REZ_DOCKER_COMPOSE up -d $CMD_LOG"
+		CMD="$LIC_SH_CMD $SERVICE $CMD_LOG"
+		log_message "CMD=[$CMD]"
 		eval $CMD
 	else
-		log "Starting service [$SERVICE] using Docker Compose."
-		CMD="$REZ_DOCKER_COMPOSE up -d "$SERVICE" $CMD_LOG"
-		log "CMD=[$CMD]"
+		log_message "Starting service [$SERVICE] using Docker Compose."
+		#CMD="$REZ_DOCKER_COMPOSE up -d "$SERVICE" $CMD_LOG"
+		CMD="$LIC_SH_CMD $SERVICE $CMD_LOG"
+		log_message "CMD=[$CMD]"
 		eval $CMD
 	fi
-	log "Docker Compose command executed for [$SERVICE]."
+	log_message "Docker Compose command executed for [$SERVICE]."
 }
 
 stop_containers() {
-	log "Stopping and removing all containers using Docker Compose."
+	log_message "Stopping and removing all containers using Docker Compose."
 	$REZ_DOCKER_COMPOSE down $CMD_LOG
-	log "All containers stopped and removed."
+	log_message "All containers stopped and removed."
 }
 
-check_container() {
+chk_con() {
 	for container_name in "${CONTAINERS[@]}"; do
-		CHK_CMD="$REZ_DOCKER ps --filter name=$container_name |grep $container_name|wc -l"
+		CHK_CMD="docker ps --filter name=$container_name |grep $container_name|wc -l"
 		CHK_RESULT=`eval "$CHK_CMD"`
 		if [ $CHK_RESULT -eq 0 ]; then
-			log "$container_name is not running. Attempting to restart"
-			start_containers "$container_name"
+			log_message "$container_name is not running. Attempting to restart"
+			set_con "$container_name"
 		else
-			log "$container_name is running"
+			log_message "$container_name is running"
 		fi
 	done
 	return 0
 }
 
-check_docker_daemon() {
+chk_daemon() {
 	local MAX_CNT=6
 	local CNT=$1
 
-	log "[Check_docker_daemon] Check Docker Service Start ($CNT/$MAX_CNT)"
+	log_message "[Chk_daemon] Check Docker Service Start ($CNT/$MAX_CNT)"
 	if (( $CNT >= $MAX_CNT )); then
-		log "Docker daemon failed to start after $MAX_CNT attempts.Exiting."
+		log "[Chk_daemon] Docker daemon failed to start after $MAX_CNT attempts.Exiting."
 		exit 1
 	fi
 
 	if ! systemctl is-active --quiet docker; then
-		log "Starting Docker deamon."
+		log_message "[Chk_daemon] Starting Docker deamon."
 		CMD="systemctl start docker"
-		log "CMD=[$CMD]"
+		log_message "[Chk_daemon] CMD=[$CMD]"
 		eval $CMD
 
 		sleep 2
 		
-		check_docker_daemon $((CNT + 1))
+		chk_daemon $((CNT + 1))
 	else
-		log "Docker daemon is already running"
+		log_message "[Chk_daemon] Docker daemon is already running"
 	fi
 }
-cd $DOCKER_COMPOSE_DIR
-check_docker_daemon 1
+#cd $DOCKER_COMPOSE_DIR
 
-check_container
+chk_daemon 1
+
+chk_con

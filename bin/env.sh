@@ -8,8 +8,9 @@ PROCESS_NAME="$(basename "$0" .sh)"
 BIN_DIR="$ROOT/bin"
 LOG_DIR="$ROOT/log"
 DATA_DIR="$ROOT/data"
-DOCKER_COMPOSE_DIR="$ROOT/docker"
+#DOCKER_COMPOSE_DIR="$ROOT/docker"
 CLI_DIR="$DATA_DIR/client_data"
+LIC_DIR="$ROOT/license"
 
 LOG_FILE="$LOG_DIR/ww_service.log"
 LDIF_FILE="$DATA_DIR/cli.ldif"
@@ -17,16 +18,17 @@ LDIF_FILE="$DATA_DIR/cli.ldif"
 UPDATE_SH="$BIN_DIR/update_$VER.sh"
 CLI_CMD="$BIN_DIR/cli.sh"
 LIC_CMD="$BIN_DIR/wwls.sh"
+LIC_SH_CMD="$LIC_DIR/scripts/license_docker.sh"
 
 source $DATA_DIR/ip
 DOCKER_SERVER=$IP
 
 #REZ_DOCKER="rez-env docker_test -- docker"
-REZ_DOCKER="docker"
-REZ_DOCKERD="$REZ_DOCKER""d"
-REZ_DOCKER_COMPOSE="$REZ_DOCKER"" compose"
-DOCKER_COMPOSE_FILE="$DOCKER_COMPOSE_DIR/docker-compose.yml"
-DOCKER_ENV_FILE="$DOCKER_COMPOSE_DIR/.env"
+#REZ_DOCKER="docker"
+#REZ_DOCKERD="$REZ_DOCKER""d"
+#REZ_DOCKER_COMPOSE="$REZ_DOCKER"" compose"
+#DOCKER_COMPOSE_FILE="$DOCKER_COMPOSE_DIR/docker-compose.yml"
+#DOCKER_ENV_FILE="$DOCKER_COMPOSE_DIR/.env"
 
 mkdir -p $BIN_DIR
 mkdir -p $LOG_DIR

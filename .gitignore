@@ -1,3 +1,4 @@
 data/cli.ldif
 data/ip
 docker/.env
+license/
